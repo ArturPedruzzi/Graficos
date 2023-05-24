@@ -51,9 +51,6 @@ class MainActivity : AppCompatActivity() {
         viewModel.leitorCVS(this, dadosList)
 
 
-
-
-        fun createBarras() {
             // lista que armazena as barras do gráfico
             val entries = ArrayList<BarEntry>()
             // armazena o nome de cada barrra do gráfico
@@ -89,7 +86,9 @@ class MainActivity : AppCompatActivity() {
             yAxis.textSize = 14f
 
             barChart.invalidate()
-        }
+
+
+
     }
 
     // listagem dos itens

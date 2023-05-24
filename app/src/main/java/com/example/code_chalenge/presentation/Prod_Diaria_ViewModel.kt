@@ -20,7 +20,6 @@ import java.io.InputStreamReader
 
 class Prod_Diaria_ViewModel(
     private val prodDao: Prod_Dao,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
     ) : ViewModel() {
 
     val prodDiariaList: LiveData<List<Prod_Diaria>> = prodDao.getAll()
@@ -48,7 +47,7 @@ class Prod_Diaria_ViewModel(
     }
 
     private fun insertDadosDatabase(dataList: List<Prod_Diaria>) {
-        viewModelScope.launch(dispatcher) {
+        viewModelScope.launch(IO) {
             for (prodDiaria in dataList) {
                 prodDao.insert(prodDiaria)
             }
