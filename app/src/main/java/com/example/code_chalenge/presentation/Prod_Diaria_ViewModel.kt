@@ -9,13 +9,19 @@ import com.example.code_chalenge.CodeApplication
 import com.example.code_chalenge.data.Prod_Dao
 import com.example.code_chalenge.data.Prod_Diaria
 import com.github.mikephil.charting.data.BarEntry
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import java.io.InputStreamReader
 
-class Prod_Diaria_ViewModel(private val prodDao: Prod_Dao): ViewModel() {
+class Prod_Diaria_ViewModel(
+    private val prodDao: Prod_Dao,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    ) : ViewModel() {
 
     val prodDiariaList: LiveData<List<Prod_Diaria>> = prodDao.getAll()
 
@@ -42,7 +48,7 @@ class Prod_Diaria_ViewModel(private val prodDao: Prod_Dao): ViewModel() {
     }
 
     private fun insertDadosDatabase(dataList: List<Prod_Diaria>) {
-        viewModelScope.launch(IO) {
+        viewModelScope.launch(dispatcher) {
             for (prodDiaria in dataList) {
                 prodDao.insert(prodDiaria)
             }
@@ -63,11 +69,10 @@ class Prod_Diaria_ViewModel(private val prodDao: Prod_Dao): ViewModel() {
     }
 
 
-
-    companion object{
+    companion object {
 
         // application no viewModel
-        fun create(application: Application) : Prod_Diaria_ViewModel {
+        fun create(application: Application): Prod_Diaria_ViewModel {
             val dataBaseInstance = (application as CodeApplication).getAppDataBase()
             val dao = dataBaseInstance.userDao()
             return Prod_Diaria_ViewModel(dao)
